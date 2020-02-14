@@ -12,43 +12,38 @@
 var spiralOrder = function(matrix) {
   let res = [];
 
-  if (matrix.length == 0) {
-    return res;
-  }
+  let rowStart = 0, rowEnd = matrix.length - 1;
+  let colStart = 0, colEnd = matrix[0].length - 1;
 
-  let rowBegin = 0;
-  let rowEnd = matrix.length - 1;
-  let colBegin = 0;
-  let colEnd = matrix[0].length - 1;
+  if(matrix.length === 0) return res
 
-  while (rowBegin <= rowEnd && colBegin <= colEnd) {
-    //right
-    for (let i = colBegin; i <= colEnd; i++) {
-      res.push(matrix[rowBegin][i])
+  while(rowStart <= rowEnd && colStart <= colEnd) {
+    //go right
+    for(i = colStart; i <= colEnd; i++) {
+      res.push(matrix[rowStart][i]);
     }
-    ++rowBegin;
-    //bottom
-    for (let i = rowBegin; i <= rowEnd; i++) {
-      res.push(matrix[i][colEnd])
+    rowStart++;
+    //go down
+    for(let i = rowStart; i <= rowEnd; i++) {
+      res.push(matrix[i][colEnd]);
     }
-    --colEnd;
-    //scan bottom right to left
-    if (rowBegin <= rowEnd) {
-      for (let i = colEnd; i >= colBegin; i--) {
-        res.push(matrix[rowEnd][i])
+    colEnd--;
+    //go left
+    if(rowStart <= rowEnd) {
+      for(let i = colEnd; i >= colStart; i--) {
+        res.push(matrix[rowEnd][i]);
       }
+      rowEnd--;
     }
-    --rowEnd;
-    //scan left to top
-    if (colBegin <= colEnd) {
-      for (let i = rowEnd; i >= rowBegin; i--) {
-        res.push(matrix[i][colBegin])
+    //go up
+    if(colStart <= colEnd) {
+      for(let i = rowEnd; i >= rowEnd; i--) {
+        res.push(matrix[i][colStart]);
       }
+      colStart++;
     }
-    ++colBegin;
   }
-
-  return res; 
+  return res;
 };
 // @lc code=end
 

@@ -10,43 +10,46 @@
  * @return {number[][]}
  */
 var generateMatrix = function(n) {
-  if (n == 0) return [];
-  if (n == 1) return [[1]];
-  let result = [], num = 1;
-  for (let i = 0; i < n; i++) {
-    result.push([]);
+  let res = []
+  for(let i = 0; i < n; i++) {
+    res.push([]);
   }
-  let rowStart = 0, rowEnd = n - 1, colStart = 0, colEnd = n - 1;
-  while (rowStart <= rowEnd && colStart <= colEnd) {
-    // to right
-    for (let i = colStart; i <= colEnd; i++) {
-      result[rowStart][i] = num;
-      num++;
+  if(n === 0) return res;
+  let counter = 1;
+  let rowStart = 0, rowEnd = n - 1;
+  let colStart = 0, colEnd = n - 1;
+
+  while(rowStart <= rowEnd && colStart <= colEnd) {
+    //go right
+    for(let i = colStart; i <= colEnd; i++) {
+      res[rowStart][i] = counter;
+      counter++;
     }
     rowStart++;
-
-    // downwards
-    for (let i = rowStart; i <= rowEnd; i++) {
-      result[i][colEnd] = num;
-      num++;
+    //go down
+    for(let i = rowStart; i <= rowEnd; i++) {
+      res[i][colEnd] = counter;
+      counter++;
     }
     colEnd--;
-
-    // to left
-    for (let i = colEnd; i >= colStart; i--) {
-      result[rowEnd][i] = num;
-      num++;
+    //go left
+    if(rowStart <= rowEnd) {
+      for(let i = colEnd; i >= colStart; i--) {
+        res[rowEnd][i] = counter;
+        counter++;
+      }
+      rowEnd--;
     }
-    rowEnd--;
-
-    // upwards
-    for (let i = rowEnd; i >= rowStart; i--) {
-      result[i][colStart] = num;
-      num++;
+    //go up
+    if(colStart <= colEnd) {
+      for(let i = rowEnd; i >= rowStart; i--) {
+        res[i][colStart] = counter;
+        counter++;
+      }
+      colStart++;
     }
-    colStart++;
   }
-  return result;
+  return res;
 }
 
 console.log(generateMatrix(3));
