@@ -7,74 +7,38 @@
  * @param {string} s
  * @return {number}
  */
-// var calculate = function(s) {
-//   var len = s.length;
-//   if (len === 0) {
-//     return 0;
-//   }
+var stack = [];
+var sign = 1, sum = 0;
 
-//   var stack = [];
-//   var res = 0;
-//   var sign = 1;
-
-//   for (let i = 0; i < len; i++) {
-//     var n = s.charAt(i);
-//     if (!isNaN(parseInt(n))) {
-//       var cur = parseInt(n);
-//       while (i + 1 < len && !isNaN(parseInt(s.charAt(i + 1)))) {
-//         cur = 10 * cur + parseInt(s.charAt(++i));
-//       }
-//       res += sign * cur;
-//     } else if (n == "-") {
-//       sign = -1;
-//     } else if (n == "+") {
-//       sign = 1;
-//     } else if (n == "(") {
-//       stack.push(res);
-//       res = 0;
-//       stack.push(sign);
-//       sign = 1;
-//     } else if (n == ")") {
-//       res = stack.pop() * res + stack.pop();
-//       sign = 1;
-//     }
-//   }
-//   return res;
-// };
-
-var calculate = s => {
-  if(s.length === 0) {
-    return 0
-  }
-  //need stack to store res if ()
-  let stack = [];
-  let res = 0;
-  let sign = 1;
-
-  for(let i = 0; i < s.length; i++) {
-    let curr = s.charAt(i);
-    //if current index is a num
-    if(!isNaN(parseInt(curr))) {
-      let temp = parseInt(curr);
-      while(i + 1 < s.length && !isNaN(parseInt(s.charAt(i + 1)))) {
-        temp = temp * 10 + parseInt(s.charAt(++i));
-      }
-      //update res
-      res += sign * temp
-    } else if(curr === '-') {
-      sign = -1;
-    } else if(curr === '+') {
-      sign = 1;
-    } else if(curr === '(') {
-      stack.push(res);
-      //reset res
-      res = 0;
-      stack.push(sign);
-      sign = 1;
-    } else if(curr === ')') {
-      res = stack.pop() * res + stack.pop();
-      sign = 1;
+//loop through str and check what each idx is
+//if number, find the whole number and update sum with sign
+//if +, update sign
+//if -, update sign
+//if (, push curr sum and sign to stack, reset sum and sign
+//if ), update sum to sum * sign (since sign was added last) and add sum
+for (let i = 0; i < s.length; i++) {
+  //number
+  if (s[i] >= '0' && s[i] <= '9') {
+    let num = 0;
+    while (s[i] >= '0' && s[i] <= '9') {
+      num *= 10;
+      num += parseInt(s[i]);
+      i++;
     }
+    sum += num * sign
+    i--;
+  } else if (s[i] === '+') {
+    sign = 1;
+  } else if (s[i] === '-') {
+    sign = -1;
+  } else if (s[i] === '(') {
+    stack.push(sum);
+    stack.push(sign);
+    sum = 0;
+    sign = 1;
+  } else if (s[i] === ')') {
+    sum = stack.pop() * sum; //pop off sign
+    sum += stack.pop(); //add current sum to previous sum
   }
-  return res;
-};
+}
+return sum;
